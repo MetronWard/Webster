@@ -10,11 +10,14 @@ logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - 
 
 class Webster:
     def __init__(self):
+        """Initiates the Web scraping class"""
         self.dictionary = 'https://www.merriam-webster.com/dictionary/'
         self.thesaurus = 'https://www.merriam-webster.com/thesaurus/'
         logging.info('The Webster class has been created')
 
-    def get_dict(self, word: list) -> tuple| None:
+    def get_dict(self, word: list) -> tuple | None:
+        """Receives a list containing a word or phrase, returns the definition(s) as well as reference
+        link if any, or returns None"""
         site = f"{self.dictionary}{'%20'.join(item for item in word)}"
         response = requests.get(site)
         logging.info(f'request sent to {site}')
@@ -49,7 +52,9 @@ class Webster:
             logging.info('Results stored in the variable "definition" have been returned')
             return definitions, site
 
-    def get_thes(self, word_in: list) -> tuple| None:
+    def get_thes(self, word_in: list) -> tuple | None:
+        """Receives a list containing a word or phrase, returns the synonyms(s) and/or antonym(s) as well as reference
+                link if any, or returns None"""
         site = f"{self.thesaurus}{'%20'.join(item for item in word_in)}"
         response = requests.get(site)
         logging.info(f'request sent to {site}')

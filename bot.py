@@ -10,23 +10,10 @@ from webster_scrape import Webster
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 
 
-def send_action(self):
-    """Sends `action` while processing func command."""
-
-    def decorator(func):
-        @wraps(func)
-        async def command_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
-            await context.bot.send_chat_action(chat_id=update.effective_message.chat_id, action=self.action)
-            return await func(update, context, *args, **kwargs)
-
-        return command_func
-
-    return decorator
-
-
 class Bot:
 
     def __init__(self):
+        """Creates the Telegram Bot"""
         name = shelve.open('keys/api_keys')
         self.api_key = name['telegram_api']
         self.webster = Webster()
@@ -49,6 +36,8 @@ class Bot:
 
     @send_action('typing')
     async def dictionary(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Receives the word after the /d command, uses the Webster class to get the definition(s)
+        and provides the result"""
         user = update.effective_user
         result = self.webster.get_dict(context.args)
         if result:
@@ -62,6 +51,8 @@ class Bot:
 
     @send_action('typing')
     async def thesa(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Receives the word after the /t command, uses the Webster class to get the synonyms and/or antonyms
+                and provides the result"""
         user = update.effective_user
         result = self.webster.get_thes(context.args)
         if result:
